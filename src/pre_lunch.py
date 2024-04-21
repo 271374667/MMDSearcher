@@ -1,15 +1,15 @@
 """
 用于初始化以及一些检查
 """
-from datetime import timedelta
 
 import loguru
 
-from src.core import paths
+from src.core import config, paths
 
 
 def init_log() -> None:
-    loguru.logger.add(paths.LOG_FILE, rotation=timedelta(days=1), retention=7)
+    loguru.logger.add(paths.LOG_FILE, rotation=config.LOG_ROTATION, retention=config.LOG_RETENTION,
+                      encoding=config.LOG_ENCODING)
     loguru.logger.success("日志初始化完成")
 
 
