@@ -47,6 +47,8 @@ executing==2.0.1
     # via stack-data
 feapder==1.9.0
     # via mmdsearcher
+greenlet==3.0.3
+    # via sqlalchemy
 idna==3.6
     # via requests
 influxdb==5.3.1
@@ -116,17 +118,18 @@ six==1.16.0
     # via python-dateutil
 soupsieve==2.5
     # via beautifulsoup4
+sqlalchemy==2.0.29
+    # via mmdsearcher
 stack-data==0.6.3
     # via ipython
 terminal-layout==3.0.0
     # via feapder
-tinydb==4.8.0
-    # via mmdsearcher
 traitlets==5.14.2
     # via ipython
     # via matplotlib-inline
 typing-extensions==4.11.0
     # via ipython
+    # via sqlalchemy
 urllib3==2.2.1
     # via feapder
     # via requests

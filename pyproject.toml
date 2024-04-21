@@ -1,16 +1,16 @@
 [project]
 name = "mmdsearcher"
 version = "0.1.0"
-description = "Add your description here"
+description = "帮助你更好的搜索MMD模型"
 authors = [
     { name = "PythonImporter", email = "271374667@qq.com" }
 ]
 dependencies = [
     "loguru>=0.7.2",
     "feapder>=1.9.0",
-    "tinydb>=4.8.0",
     "ansi2html>=1.9.1",
     "pyside6-fluent-widgets>=1.5.5",
+    "sqlalchemy>=2.0.29",
 ]
 readme = "README.md"
 requires-python = ">= 3.10"
