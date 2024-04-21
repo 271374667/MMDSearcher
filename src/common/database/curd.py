@@ -75,7 +75,6 @@ class Curd:
 
 if __name__ == '__main__':
     curd = Curd()
-    curd.add(1, datetime.now(), 'test', 'test', 'test', 'test', 'test', 1, 'test', 'test', datetime.now(),
-             datetime.now(), 0, 0, 'test', 'test', datetime.now())
+    curd.add(1, datetime.now(), 'test', 'test', 'test', 'test', 'test', 1, 'test', 'test', datetime.now(), datetime.now(), 0, 0, 'test', 'test', datetime.now())
     print('add success')
     curd.get_mmd_query()

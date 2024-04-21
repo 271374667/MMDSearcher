@@ -1,3 +1,6 @@
+from datetime import datetime
+from sqlalchemy import func
+
 from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -8,7 +11,7 @@ class Base(DeclarativeBase):
 
 class MMD(Base):
     __tablename__ = 'mmd'
-    id: Mapped[Integer] = mapped_column(Integer, primary_key=True)  # 每一个MMD都有一个唯一的id
+    id: Mapped[Integer] = mapped_column(Integer, primary_key=True, autoincrement=True)  # 每一个MMD都有一个唯一的id
     mmd_id: Mapped[Integer] = mapped_column(Integer)  # 网站上的id
     post_time: Mapped[DateTime] = mapped_column(DateTime)  # 模型上传时间
     author: Mapped[String] = mapped_column(String(32))  # 模型作者
@@ -21,7 +24,7 @@ class MMD(Base):
     tag_id: Mapped[Integer] = mapped_column(Integer, ForeignKey('tag.id'))  # 与tag表的关联
     tag: Mapped[relationship] = relationship('Tag', back_populates='mmds')
     url: Mapped[String] = mapped_column(String(256))  # 模型详情页面的url
-    create_time: Mapped[DateTime] = mapped_column(DateTime)  # 这一条记录的创建时间
+    create_time: Mapped[DateTime] = mapped_column(DateTime, default=func.now())  # 这一条记录的创建时间
     update_time: Mapped[DateTime] = mapped_column(DateTime)  # 这一条记录的更新时间
     status: Mapped[Integer] = mapped_column(Integer)  # 这一条记录的状态,0表示还未看过,1表示已经看过
     download_status: Mapped[Integer] = mapped_column(Integer)  # 这一条记录的下载状态,0表示无法下载(比如链接失效,1表示可以下载,2代表未知网站
@@ -32,10 +35,10 @@ class MMD(Base):
 
 class Tag(Base):
     __tablename__ = 'tag'
-    id: Mapped[Integer] = mapped_column(Integer, primary_key=True)  # tag的id
+    id: Mapped[Integer] = mapped_column(Integer, primary_key=True, autoincrement=True)  # tag的id
     tag_en_name: Mapped[Integer] = mapped_column(Integer)  # tag的英文名字
     tag_cn_name: Mapped[String] = mapped_column(String(32))  # tag的中文名字(调用翻译API翻译过来的
-    create_time: Mapped[DateTime] = mapped_column(DateTime)  # tag的创建时间
+    create_time: Mapped[DateTime] = mapped_column(DateTime, default=func.now())  # tag的创建时间
     mmds: Mapped[relationship] = relationship('MMD', back_populates='tag')
 
     def __repr__(self) -> str:
