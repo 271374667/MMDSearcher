@@ -1,12 +1,17 @@
-from datetime import datetime
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Table
 from sqlalchemy import func
-
-from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
     pass
+
+
+# 创建关联表
+mmd_tag = Table('mmd_tag', Base.metadata,
+                Column('mmd_id', Integer, ForeignKey('mmd.id')),
+                Column('tag_id', Integer, ForeignKey('tag.id'))
+                )
 
 
 class MMD(Base):
@@ -21,8 +26,7 @@ class MMD(Base):
     rating: Mapped[String] = mapped_column(String(16))  # 模型的分级
     score: Mapped[Integer] = mapped_column(Integer)  # 模型的评分
     tags: Mapped[String] = mapped_column(String(512))  # 模型的标签,用#分割,比如#tag1#tag2
-    tag_id: Mapped[Integer] = mapped_column(Integer, ForeignKey('tag.id'))  # 与tag表的关联
-    tag: Mapped[relationship] = relationship('Tag', back_populates='mmds')
+    tag: Mapped[list['Tag']] = relationship('Tag', secondary=mmd_tag, back_populates='mmds')
     url: Mapped[String] = mapped_column(String(256))  # 模型详情页面的url
     create_time: Mapped[DateTime] = mapped_column(DateTime, default=func.now())  # 这一条记录的创建时间
     update_time: Mapped[DateTime] = mapped_column(DateTime)  # 这一条记录的更新时间
@@ -39,7 +43,7 @@ class Tag(Base):
     tag_en_name: Mapped[Integer] = mapped_column(Integer)  # tag的英文名字
     tag_cn_name: Mapped[String] = mapped_column(String(32))  # tag的中文名字(调用翻译API翻译过来的
     create_time: Mapped[DateTime] = mapped_column(DateTime, default=func.now())  # tag的创建时间
-    mmds: Mapped[relationship] = relationship('MMD', back_populates='tag')
+    mmds: Mapped[list[MMD]] = relationship('MMD', secondary=mmd_tag, back_populates='tag')
 
     def __repr__(self) -> str:
         return f'<Tag(tag_en_name={self.tag_en_name}, tag_cn_name={self.tag_cn_name}, create_time={self.create_time})>'

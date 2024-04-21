@@ -6,52 +6,37 @@ from sqlalchemy.orm import Session
 
 from src.common.database.model import MMD, Tag
 from src.common.database.session import session
+from src.core.datacls import MMDData, TagData
 
 
 class Curd:
     def __init__(self):
         self._session: Session = session
 
-    def add(self,
-            mmd_id: int,
-            post_time: datetime,
-            author: str,
-            pic_size: str,
-            pic_url: str,
-            source: str,
-            rating: str,
-            score: int,
-            tags: str,
-            url: str,
-            create_time: datetime,
-            update_time: datetime,
-            status: int,
-            download_status: int,
-            # 下面是tag的信息
-            tag_en_name: str,
-            tag_cn_name: str,
-            tag_create_time: datetime
-            ):
-        tag = Tag(tag_en_name=tag_en_name,
-                  tag_cn_name=tag_cn_name,
-                  create_time=tag_create_time)
+    def add(self, mmd_data: MMDData, tag_data: list[TagData]):
+        tags: list[Tag] = [Tag(
+                tag_en_name=tag.tag_en_name,
+                tag_cn_name=tag.tag_cn_name,
+                create_time=tag.create_time
+                ) for tag in tag_data]
 
-        mmd = MMD(mmd_id=mmd_id,
-                  post_time=post_time,
-                  author=author,
-                  pic_size=pic_size,
-                  pic_url=pic_url,
-                  source=source,
-                  rating=rating,
-                  score=score,
-                  tags=tags,
-                  url=url,
-                  create_time=create_time,
-                  update_time=update_time,
-                  status=status,
-                  download_status=download_status,
-                  tag=tag
-                  )
+        mmd = MMD(
+                mmd_id=mmd_data.mmd_id,
+                post_time=mmd_data.post_time,
+                author=mmd_data.author,
+                pic_size=mmd_data.pic_size,
+                pic_url=mmd_data.pic_url,
+                source=mmd_data.source,
+                rating=mmd_data.rating,
+                score=mmd_data.score,
+                tags=mmd_data.tags,
+                url=mmd_data.url,
+                create_time=mmd_data.create_time,
+                update_time=mmd_data.update_time,
+                status=mmd_data.status,
+                download_status=mmd_data.download_status,
+                tag=tags
+                )
         self._session.add(mmd)
         self._session.commit()
 
@@ -75,6 +60,25 @@ class Curd:
 
 if __name__ == '__main__':
     curd = Curd()
-    curd.add(1, datetime.now(), 'test', 'test', 'test', 'test', 'test', 1, 'test', 'test', datetime.now(), datetime.now(), 0, 0, 'test', 'test', datetime.now())
-    print('add success')
-    curd.get_mmd_query()
+    mmd_data = MMDData(
+            mmd_id=1,
+            post_time=datetime.now(),
+            author='test',
+            pic_size='test',
+            pic_url='test',
+            source='test',
+            rating='test',
+            score=1,
+            tags='test',
+            url='test',
+            create_time=datetime.now(),
+            update_time=datetime.now(),
+            status=1,
+            download_status=1
+            )
+    tag_data = [TagData(
+            tag_en_name=f'test{i}',
+            tag_cn_name=f'test{i}',
+            create_time=datetime.now()
+            ) for i in range(5)]
+    curd.add(mmd_data, tag_data)
