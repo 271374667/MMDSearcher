@@ -11,6 +11,7 @@ LOG_DIR = APP_DATA_DIR / 'log'
 # Path to the file
 DATABASE_FILE = APP_DATA_DIR / 'database.db'
 LOG_FILE = LOG_DIR / 'log.log'
+CONFIG_FILE = ROOT / 'settings.json'
 
 # All directories in the project
 ALL_DIRS: list[Path] = [APP_DATA_DIR, LOG_DIR]

@@ -6,6 +6,7 @@ import loguru
 
 from src.common.database.session import create_db
 from src.core import config, paths
+from src.core.settings import settings
 
 
 def init_log() -> None:
@@ -25,9 +26,16 @@ def create_db_if_not_exists() -> None:
         loguru.logger.success("数据库文件创建完成")
 
 
+def create_config_if_not_exists() -> None:
+    if not paths.CONFIG_FILE.exists():
+        settings.save()
+        loguru.logger.success("配置文件创建完成")
+
+
 def pre_lunch() -> None:
     create_all_dir_if_not_exists()
     create_db_if_not_exists()
+    create_config_if_not_exists()
     init_log()
     loguru.logger.success("初始化完成")
 

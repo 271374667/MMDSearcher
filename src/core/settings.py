@@ -9,6 +9,8 @@ from enum import Enum
 from pathlib import Path
 from typing import List
 
+from src.core.paths import CONFIG_FILE
+
 
 def exceptionHandler(*default):
     """ decorator for exception handling
@@ -342,4 +344,13 @@ class QConfig:
                         items[key].deserializeFrom(value)
 
 
-settings = QConfig()
+class Settings(QConfig):
+    BAIDU_TRANSLATE_APP_ID = ConfigItem("baidu_translate", "app_id", "")
+    BAIDU_TRANSLATE_SECRET_KEY = ConfigItem("baidu_translate", "secret_key", "")
+
+
+settings = Settings()
+settings.file = CONFIG_FILE
+if not CONFIG_FILE.exists():
+    settings.save()
+settings.load(CONFIG_FILE, settings)
