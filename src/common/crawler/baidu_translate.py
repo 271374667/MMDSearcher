@@ -1,5 +1,6 @@
 import hashlib
 import random
+from functools import lru_cache
 
 import loguru
 import requests
@@ -12,12 +13,16 @@ class BaiduTranslate:
         self._app_id = settings.get(settings.BAIDU_TRANSLATE_APP_ID)
         self._secret_key = settings.get(settings.BAIDU_TRANSLATE_SECRET_KEY)
 
+    @lru_cache
     def en2cn(self, content: str) -> str:
         return self._translate(content, 'en', 'zh')
+        # return 'test'
 
+    @lru_cache
     def cn2en(self, content: str) -> str:
         return self._translate(content, 'zh', 'en')
 
+    @lru_cache
     def _translate(self, content: str, from_lang: str, to_lang: str) -> str:
         base_url = 'https://fanyi-api.baidu.com/api/trans/vip/translate'
         salt = str(random.randint(32768, 65536))
@@ -37,4 +42,6 @@ class BaiduTranslate:
 
 if __name__ == '__main__':
     baidu_translate = BaiduTranslate()
+    print(baidu_translate.en2cn('test this line'))
+    print(baidu_translate.en2cn('test this line'))
     print(baidu_translate.en2cn('test this line'))

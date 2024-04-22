@@ -1,7 +1,13 @@
+from datetime import datetime
+from typing import Optional
+
 import feapder
 import loguru
 
+from src.common.crawler.baidu_translate import BaiduTranslate
 from src.common.crawler.items import MMDItem
+from src.core.datacls import TagData
+from src.common.database.curd import Curd
 
 
 class MMDArchiveSpider(feapder.AirSpider):
@@ -15,6 +21,11 @@ class MMDArchiveSpider(feapder.AirSpider):
                     'src.common.crawler.pipelines.Pipeline': 300,
                     }
             )
+
+    def __init__(self, thread_count: Optional[int] = None):
+        super().__init__(thread_count=thread_count)
+        self._baidu_translate = BaiduTranslate()
+        self._curd = Curd()
 
     def start_requests(self):
         yield feapder.Request("https://mmda.booru.org/index.php?page=post&s=list")
@@ -38,19 +49,39 @@ class MMDArchiveSpider(feapder.AirSpider):
         tag_list: list[str] = response.xpath('//div[@id="tag_list"]/ul/li/span/a/text()').extract()
         tags: str = "#".join(tag_list)
         item.tags = tags
+        # 将标签里面的每一个值翻译成中文
+        tag_data_list: list[TagData] = []
+        for each in tag_list:
+            tag_cn = self._baidu_translate.en2cn(each)
+            loguru.logger.debug(f"{each} -> {tag_cn}")
 
-        item.mmd_id = int(response.url.split("=")[-1])
-        item.post_time = response.xpath('//div[@id="stats"]/ul/li[1]/text()').extract_first()
-        item.author = response.xpath('//div[@id="stats"]/ul/li[2]/a/text()').extract_first()
-        item.pic_size = response.xpath('//div[@id="stats"]/ul/li[3]/text()').extract_first()
-        item.pic_url = response.xpath('//div[@id="image"]/a/img/@src').extract_first()
-        item.source = response.xpath('//div[@id="image"]/a/@href').extract_first()
-        item.rating = response.xpath('//div[@id="stats"]/ul/li[4]/text()').extract_first()
-        item.score = int(response.xpath('//div[@id="stats"]/ul/li[5]/text()').extract_first())
-        item.tags = response.xpath('//div[@id="tag-list"]/ul/li/a/text()').extract()
+            # 组装TagData
+            tag_data = TagData(tag_en_name=each, tag_cn_name=tag_cn, create_time=datetime.now())
+            tag_data_list.append(tag_data)
+
+        (mmd_id, post_time, author, pic_size, source, rating, score) = response.xpath(
+                '//div[@id="tag_list"]/ul/text()').extract()
+        loguru.logger.debug(f'{mmd_id=} {post_time=} {author=} {pic_size=} {source=} {rating=} {score=}')
+        item.mmd_id = int(mmd_id.split(":")[-1].strip())
+        item.post_time = datetime.strptime(post_time.split(":", maxsplit=1)[-1].strip(), "%Y-%m-%d %H:%M:%S")
+        item.author = author.split(":")[-1].strip()
+        item.pic_size = pic_size.split(":")[-1].strip()
+        item.pic_url = response.xpath('//div[@id="note-container"]/img/@src').extract_first()
+        item.source = source.split(":")[-1].strip()
+        item.rating = rating.split(":")[-1].strip()
+        item.score = int(score.split(":")[-1].strip())
+        item.tag_list = tag_data_list
         item.url = response.url
+        item.create_time = datetime.now()
+        item.update_time = datetime.now()
+        item.status = 0
+        item.download_status = 0
+
+        if self._curd.get_mmd_query().filter_by(mmd_id=item.mmd_id).first():
+            loguru.logger.debug(f"已经更新到最新版本, mmd_id={item.mmd_id}, 不再继续爬取")
+            self.stop_spider()
         yield item
 
 
 if __name__ == "__main__":
-    MMDArchiveSpider().start()
+    MMDArchiveSpider(thread_count=2).start()

@@ -3,6 +3,8 @@ from typing import Optional
 
 from feapder import Item
 
+from src.core.datacls import TagData
+
 
 class MMDItem(Item):
     __unique_key__ = ["url"]
@@ -23,6 +25,4 @@ class MMDItem(Item):
         self.update_time: Optional[datetime] = None
         self.status: Optional[int] = None
         self.download_status: Optional[int] = None
-        self.tag_en_name: Optional[str] = None
-        self.tag_cn_name: Optional[str] = None
-        self.tag_create_time: Optional[datetime] = None
+        self.tag_list: Optional[list[TagData]] = None

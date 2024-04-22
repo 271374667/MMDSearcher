@@ -5,8 +5,7 @@ from feapder.pipelines import BasePipeline
 
 from src.common.crawler.items import MMDItem
 from src.common.database.curd import Curd
-from src.core.datacls import TagData
-from datetime import datetime
+from src.core.datacls import MMDData
 
 
 class Pipeline(BasePipeline):
@@ -29,13 +28,27 @@ class Pipeline(BasePipeline):
                  若False，不会将本批数据入到去重库，以便再次入库
 
         """
+        print(items)
         self._count += 1
         for item in items:
-            if isinstance(item, MMDItem):
-                tags = item.tags.split("#")
-                tags_data = [TagData(tag_en_name=tag, tag_cn_name="", create_time=datetime.now()) for tag in tags]
-                mmd_data = item.to_dict()
-                tag_data = mmd_data.pop("tag")
-                self._curd.add(mmd_data, tag_data)
-        loguru.logger.debug(f'成功将第{self._count}批数据保存到数据库, 共{len(items)}条')
+            mmd_data = MMDData(
+                    mmd_id=item.get('mmd_id'),
+                    post_time=item.get('post_time'),
+                    author=item.get('author'),
+                    pic_size=item.get('pic_size'),
+                    pic_url=item.get('pic_url'),
+                    source=item.get('source'),
+                    rating=item.get('rating'),
+                    score=item.get('score'),
+                    tags=item.get('tags'),
+                    url=item.get('url'),
+                    create_time=item.get('create_time'),
+                    update_time=item.get('update_time'),
+                    status=item.get('status'),
+                    download_status=item.get('download_status')
+                    )
+            self._curd.add(mmd_data, item.get('tag_list'))
+            loguru.logger.debug(f'成功保存一条数据到数据库, mmd_id={item.get("mmd_id")}')
+
+        # loguru.logger.debug(f'成功将第{self._count}批数据保存到数据库, 共{len(items)}条')
         return True
