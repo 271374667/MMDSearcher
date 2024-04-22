@@ -11,6 +11,8 @@ dependencies = [
     "ansi2html>=1.9.1",
     "pyside6-fluent-widgets>=1.5.5",
     "sqlalchemy>=2.0.29",
+    "fastapi>=0.110.2",
+    "uvicorn>=0.29.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.10"
