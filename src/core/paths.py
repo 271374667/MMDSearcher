@@ -9,8 +9,8 @@ APP_DATA_DIR = ROOT / 'AppData'
 LOG_DIR = APP_DATA_DIR / 'log'
 
 # Path to the file
+DATABASE_META_FILE = ROOT / 'database_meta.json'
 DATABASE_FILE = APP_DATA_DIR / 'database.db'
-DATABASE_META_FILE = APP_DATA_DIR / 'database_meta.json'
 LOG_FILE = LOG_DIR / 'log.log'
 CONFIG_FILE = ROOT / 'settings.json'
 

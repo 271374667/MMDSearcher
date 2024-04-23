@@ -27,7 +27,6 @@ class Pipeline(BasePipeline):
                  若False，不会将本批数据入到去重库，以便再次入库
 
         """
-        print(items)
         self._count += 1
         for item in items:
             mmd_data = MMDData(

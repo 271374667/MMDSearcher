@@ -10,3 +10,5 @@ LOG_ROTATION: timedelta = timedelta(days=1)
 LOG_RETENTION: timedelta = timedelta(days=7)
 # 日志的编码格式
 LOG_ENCODING: str = 'utf-8'
+# 远程仓库的地址
+REMOTE_REPOSITORY: str = 'https://github.com/271374667/MMDSearcher'
