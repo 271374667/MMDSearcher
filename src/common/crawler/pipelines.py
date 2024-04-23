@@ -3,7 +3,6 @@ from typing import Dict, List
 import loguru
 from feapder.pipelines import BasePipeline
 
-from src.common.crawler.items import MMDItem
 from src.common.database.curd import Curd
 from src.core.datacls import MMDData
 
