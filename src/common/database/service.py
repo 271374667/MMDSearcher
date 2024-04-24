@@ -1,4 +1,6 @@
 from src.common.database.curd import Curd
+from src.core.enums import DownloadStatus, Status
+from src.utils.time_manager import get_current_datetime
 
 
 class Service:
@@ -10,3 +12,11 @@ class Service:
 
     def get_tag_count(self) -> int:
         return self._curd.get_tag_query().count()
+
+    def set_mmd_status(self, mmd_id: int, status: Status):
+        self._curd.update_by_mmd_id(mmd_id, status=status.value)
+        self._curd.update_by_mmd_id(mmd_id, update_time=get_current_datetime())
+
+    def set_mmd_download_status(self, mmd_id: int, download_status: DownloadStatus):
+        self._curd.update_by_mmd_id(mmd_id, download_status=download_status.value)
+        self._curd.update_by_mmd_id(mmd_id, update_time=get_current_datetime())
