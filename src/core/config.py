@@ -12,3 +12,5 @@ LOG_RETENTION: timedelta = timedelta(days=7)
 LOG_ENCODING: str = 'utf-8'
 # 远程仓库的地址
 REMOTE_REPOSITORY: str = 'https://github.com/271374667/MMDSearcher'
+# 数据库meta文件的地址
+DATABASE_META_URL: str = r'https://raw.githubusercontent.com/271374667/MMDSearcher/master/database_meta.json'

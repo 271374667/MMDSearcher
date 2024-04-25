@@ -2,13 +2,12 @@ import hashlib
 import json
 from pathlib import Path
 from typing import Optional
-from urllib.parse import urljoin
 
 import loguru
 import requests
 
 from src.common.database.service import Service
-from src.core.config import REMOTE_REPOSITORY
+from src.core.config import DATABASE_META_URL, REMOTE_REPOSITORY
 from src.core.paths import DATABASE_FILE, DATABASE_META_FILE
 from src.utils.time_manager import get_current_datetime_str
 
@@ -55,9 +54,9 @@ def get_db_from_remote() -> Optional[dict]:
     """从远程仓库下载数据库文件"""
     loguru.logger.debug(f'开始从远程仓库{REMOTE_REPOSITORY}下载数据库文件')
     try:
-        remote_url: str = urljoin(REMOTE_REPOSITORY, DATABASE_FILE.name)
-        response = requests.get(remote_url).json()
+        response = requests.get(DATABASE_META_URL).json()
         loguru.logger.debug('从远程仓库下载数据库文件成功')
+        loguru.logger.debug(f'远程仓库数据库元数据: {response}')
     except Exception as e:
         loguru.logger.error(f'从远程仓库下载数据库文件失败, {e}')
         return None

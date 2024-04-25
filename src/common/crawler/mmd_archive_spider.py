@@ -6,8 +6,8 @@ import loguru
 
 from src.common.crawler.baidu_translate import BaiduTranslate
 from src.common.crawler.items import MMDItem
-from src.core.datacls import TagData
 from src.common.database.curd import Curd
+from src.core.datacls import TagData
 
 
 class MMDArchiveSpider(feapder.AirSpider):
