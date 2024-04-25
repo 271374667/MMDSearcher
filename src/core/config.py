@@ -14,3 +14,5 @@ LOG_ENCODING: str = 'utf-8'
 REMOTE_REPOSITORY: str = 'https://github.com/271374667/MMDSearcher'
 # 数据库meta文件的地址
 DATABASE_META_URL: str = r'https://raw.githubusercontent.com/271374667/MMDSearcher/master/database_meta.json'
+# 数据库文件的地址
+DATABASE_FILE_URL: str = r'https://raw.githubusercontent.com/271374667/MMDSearcher/master/database.db'

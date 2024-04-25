@@ -7,7 +7,7 @@ import loguru
 import requests
 
 from src.common.database.service import Service
-from src.core.config import DATABASE_META_URL, REMOTE_REPOSITORY
+from src.core.config import DATABASE_FILE_URL, DATABASE_META_URL, REMOTE_REPOSITORY
 from src.core.paths import DATABASE_FILE, DATABASE_META_FILE
 from src.utils.time_manager import get_current_datetime_str
 
@@ -73,6 +73,18 @@ def write_db_meta(meta: dict) -> None:
         json.dump(meta, f, indent=2)
 
 
+def download_new_db_from_remote() -> None:
+    """从远程仓库下载最新的数据库文件"""
+    loguru.logger.debug(f'开始从远程仓库{REMOTE_REPOSITORY}下载数据库文件')
+    try:
+        response = requests.get(DATABASE_FILE_URL)
+        with open(DATABASE_FILE_URL, 'wb') as f:
+            f.write(response.content)
+        loguru.logger.debug(f'从远程仓库下载数据库文件成功, 大小为{len(response.content) / (1024 * 1024):.2f}MB')
+    except Exception as e:
+        loguru.logger.error(f'从远程仓库下载数据库文件失败, {e}')
+
+
 def is_db_meta_changed() -> bool:
     """判断数据库元数据是否发生变化
 
@@ -91,8 +103,10 @@ def is_db_meta_changed() -> bool:
     old_meta['md5'] = current_md5
     write_db_meta(new_meta)
     loguru.logger.debug(f'数据库元数据发生变化, {old_meta} -> {new_meta}')
+    download_new_db_from_remote()
     return True
 
 
 if __name__ == '__main__':
-    print(is_db_meta_changed())
+    # print(is_db_meta_changed())
+    download_new_db_from_remote()
