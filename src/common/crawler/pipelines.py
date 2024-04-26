@@ -47,6 +47,4 @@ class Pipeline(BasePipeline):
                     )
             self._curd.add(mmd_data, item.get('tag_list'))
             loguru.logger.debug(f'成功保存一条数据到数据库, mmd_id={item.get("mmd_id")}')
-
-        # loguru.logger.debug(f'成功将第{self._count}批数据保存到数据库, 共{len(items)}条')
         return True

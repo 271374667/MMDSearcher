@@ -29,7 +29,7 @@ class MMDData:
 
 
 @dataclass(slots=True, frozen=True)
-class ApifoxModel:
+class ApifoxDataclass:
     """每一页最多读取多少个"""
     limit: int
     """偏移量"""
@@ -50,6 +50,15 @@ class ApifoxModel:
     score: Optional[int] = None
     """score搜索的运算符,0为等于,1为小于,2为大于"""
     score_operation: Optional[int] = None
+    """0表示不排序
+    1表示按照评分降序
+    2表示按照评分升序
+    3表示按照标签数量降序
+    4表示按照标签数量升序
+    5表示按照上传时间降序
+    6表示按照上传时间升序
+    """
+    sort_by: Optional[str] = None
     """这一条记录的状态,0表示还未看过,1表示已经看过"""
     status: Optional[int] = None
     """tag的搜索方式,0表示OR的关系,1表示AND的关系"""

@@ -4,6 +4,12 @@ config是程序的配置文件，包括数据库的配置、日志的配置、�
 """
 from datetime import timedelta
 
+# 服务器host
+HOST: str = '127.0.0.1'
+# 服务器端口
+PORT: int = 55000
+# 默认每一页的数量
+DEFAULT_PAGE_SIZE: int = 15
 # 日志超过这个时间会被打包成压缩文件
 LOG_ROTATION: timedelta = timedelta(days=1)
 # 日志超过这个时间会被删除

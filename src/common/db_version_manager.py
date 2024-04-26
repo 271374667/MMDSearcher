@@ -85,7 +85,7 @@ def download_new_db_from_remote() -> None:
         loguru.logger.error(f'从远程仓库下载数据库文件失败, {e}')
 
 
-def is_db_meta_changed() -> bool:
+def update_db_from_remote() -> bool:
     """判断数据库元数据是否发生变化
 
     Returns:
