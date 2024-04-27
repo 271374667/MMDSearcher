@@ -41,5 +41,3 @@ class ParameterExceptionBase(MyException):
 class ParameterNotFoundException(ParameterExceptionBase):
     ...
 
-
-raise ParameterNotFoundException('mmd not found')
