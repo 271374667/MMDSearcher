@@ -1,6 +1,7 @@
 import json
 import subprocess
 import sys
+import loguru
 from typing import Union
 
 from PySide6.QtCore import QThread, Signal
@@ -117,12 +118,12 @@ if __name__ == "__main__":
     cte = CMDTextEdit()
     cte.show()
     # Example of running an external command:
-    # cte.run_cmd('ping 127.0.0.1')
-    # loguru.logger.info("Hello World!")
-    # loguru.logger.error("This is an error message")
-    # loguru.logger.warning("This is a warning message")
-    # loguru.logger.debug("This is a debug message")
-    # loguru.logger.critical("我是一段中文日志信息")
+    cte.run_cmd('ping 127.0.0.1')
+    loguru.logger.info("Hello World!")
+    loguru.logger.error("This is an error message")
+    loguru.logger.warning("This is a warning message")
+    loguru.logger.debug("This is a debug message")
+    loguru.logger.critical("我是一段中文日志信息")
 
     # 一个绿色的ANSI颜色代码
     # text = "\x1b[94m\x1b[92m我是一个绿色的字\x1b[0m"
