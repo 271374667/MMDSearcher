@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from src.core.enums import DownloadStatus, Status
+
 
 @dataclass(slots=True, frozen=True)
 class TagData:
@@ -37,7 +39,7 @@ class ApifoxDataclass:
     """模型作者,可以模糊搜索"""
     author: Optional[str] = None
     """这一条记录的下载状态,0表示无法下载(比如链接失效,1表示可以下载,2代表未知网站"""
-    download_status: Optional[int] = None
+    download_status: Optional[DownloadStatus] = None
     """网站上的id"""
     mmd_id: Optional[int] = None
     """模型上传时间(起始搜索时间)"""
@@ -60,7 +62,7 @@ class ApifoxDataclass:
     """
     sort_by: Optional[str] = None
     """这一条记录的状态,0表示还未看过,1表示已经看过"""
-    status: Optional[int] = None
+    status: Optional[Status] = None
     """tag的搜索方式,0表示OR的关系,1表示AND的关系"""
     tag_operation: Optional[int] = None
     """模型的标签,用#分割,比如tag1#tag2#tag3"""

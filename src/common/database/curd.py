@@ -1,10 +1,10 @@
-from datetime import datetime
 from typing import Type
 
+from sqlalchemy import func
 from sqlalchemy.orm import Query
 from sqlalchemy.orm import Session
 
-from src.common.database.model import MMD, Tag
+from src.common.database.model import MMD, Tag, mmd_tag
 from src.common.database.session import session
 from src.core.datacls import MMDData, TagData
 
@@ -14,11 +14,17 @@ class Curd:
         self._session: Session = session
 
     def add(self, mmd_data: MMDData, tag_data: list[TagData]):
-        tags: list[Tag] = [Tag(
-                tag_en_name=tag.tag_en_name,
-                tag_cn_name=tag.tag_cn_name,
-                create_time=tag.create_time
-                ) for tag in tag_data]
+        # 先判断tag是否存在,不存在则添加
+        tags: list[Tag] = []
+        for tag in tag_data:
+            tag = self._session.query(Tag).filter(Tag.tag_en_name == tag.tag_en_name).first()
+            if not tag:
+                tag = Tag(
+                        tag_en_name=tag.tag_en_name,
+                        tag_cn_name=tag.tag_cn_name,
+                        create_time=tag.create_time
+                        )
+            tags.append(tag)
 
         mmd = MMD(
                 mmd_id=mmd_data.mmd_id,
@@ -59,26 +65,36 @@ class Curd:
 
 
 if __name__ == '__main__':
+    from collections import Counter
     curd = Curd()
-    mmd_data = MMDData(
-            mmd_id=1,
-            post_time=datetime.now(),
-            author='test',
-            pic_size='test',
-            pic_url='test',
-            source='test',
-            rating='test',
-            score=1,
-            tags='test',
-            url='test',
-            create_time=datetime.now(),
-            update_time=datetime.now(),
-            status=1,
-            download_status=1
-            )
-    tag_data = [TagData(
-            tag_en_name=f'test{i}',
-            tag_cn_name=f'test{i}',
-            create_time=datetime.now()
-            ) for i in range(5)]
-    curd.add(mmd_data, tag_data)
+    with session as s:
+        mmd = (session.query(Tag.tag_en_name, Tag.tag_cn_name, func.count(mmd_tag.c.mmd_id))
+               .join(mmd_tag, Tag.id == mmd_tag.c.tag_id)
+               .join(MMD, mmd_tag.c.mmd_id == MMD.id)
+               .group_by(Tag.tag_en_name, Tag.tag_cn_name, Tag.create_time)
+               .order_by(func.count(mmd_tag.c.mmd_id).desc())
+               .all())
+        print(Counter(mmd))
+        print(mmd)
+    # mmd_data = MMDData(
+    #         mmd_id=1,
+    #         post_time=datetime.now(),
+    #         author='test',
+    #         pic_size='test',
+    #         pic_url='test',
+    #         source='test',
+    #         rating='test',
+    #         score=1,
+    #         tags='test',
+    #         url='test',
+    #         create_time=datetime.now(),
+    #         update_time=datetime.now(),
+    #         status=1,
+    #         download_status=1
+    #         )
+    # tag_data = [TagData(
+    #         tag_en_name=f'test{i}',
+    #         tag_cn_name=f'test{i}',
+    #         create_time=datetime.now()
+    #         ) for i in range(5)]
+    # curd.add(mmd_data, tag_data)
