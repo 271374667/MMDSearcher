@@ -1,6 +1,6 @@
 <template>
   <el-container class="home-main" direction="vertical">
-    <header class="header">
+    <el-header height="auto">
 		<div class="search">
 			<el-input placeholder="请输入内容" v-model="input" clearable class="input"></el-input>
 			<el-button type="primary" icon="el-icon-search">搜索</el-button>
@@ -31,86 +31,26 @@
 				</el-dropdown-menu>
 			</el-dropdown>
 		</div>
-	<div>
-		<!-- <el-col :span="14"> -->
-
-		<!-- </el-col> -->
-	</div>
-    </header>
-	
-
-
-    <el-main class="main">
-    <!-- <div class="sort">
-        <ul>
-          <li>
-            <span>评分最高</span>
-            <i class="el-icon-caret-bottom"></i>
-            
-          </li>
-          <li>
-            <span>标签数量</span>
-            <i class="el-icon-caret-bottom"></i>
-            
-          </li>
-          <li>
-            <span>上传时间</span>
-            <i class="el-icon-caret-bottom"></i>
-            
-          </li>
-        </ul>
-      </div> -->
-	<div>
-		<el-radio-group v-model="radio">
-			<el-radio-button label="评分最高" >评分最高
-				<i class="el-icon-caret-bottom" v-if="radio=='评分最高'"></i>
-			</el-radio-button>
-			<el-radio-button label="标签数量">标签数量
-				<i class="el-icon-caret-bottom" v-if="radio=='标签数量'"></i>
-			</el-radio-button>
-			<el-radio-button label="上传时间">上传时间
-				<i class="el-icon-caret-bottom" v-if="radio=='上传时间'"></i>
-			</el-radio-button>
-		</el-radio-group>
-	</div>
-
-<!--      <ul class="card-list">
-        <li class="card">
-          <div class="card-top">
-            <img src="" alt="" />
-          </div>
-          <div class="card-bottom">
-            <p>标题:</p>
-            <p>标签:</p>
-            <p>上传时间:</p>
-            <p>评分:</p>
-          </div>
-          
-        </li>
-      </ul> -->
-		<!-- <el-row>
-		<el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0"> -->
-		<div class="card-item">
-			<div class="confirm">已读</div>
-			<el-card :body-style="{ padding: '0px' }">
-				<img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-				<div style="padding: 14px;">
-					<span>好吃的汉堡</span>
-					<div style="padding-top: 10px;">
-						<i>作者:</i>
-						<i>级别:</i>
-						<i>评分:</i>
-						<!-- <el-button type="text" class="button">操作按钮</el-button> -->
-					</div>
-				</div>
-			</el-card>
+		<div>
+			<el-radio-group v-model="radio">
+				<el-radio-button label="评分最高" >评分最高
+					<i class="el-icon-caret-bottom" v-if="radio=='评分最高'"></i>
+				</el-radio-button>
+				<el-radio-button label="标签数量">标签数量
+					<i class="el-icon-caret-bottom" v-if="radio=='标签数量'"></i>
+				</el-radio-button>
+				<el-radio-button label="上传时间">上传时间
+					<i class="el-icon-caret-bottom" v-if="radio=='上传时间'"></i>
+				</el-radio-button>
+			</el-radio-group>
 		</div>
-		
-		<!-- </el-col>
-		</el-row> -->
+    </el-header>
+	
+    <el-main>
+		<HomeCard class="item" v-for="i in 10" :key="i"></HomeCard>
     </el-main>
 
-    <footer class="footer">
+    <el-footer>
       <div class="block">
         <el-pagination
           @size-change="handleSizeChange"
@@ -119,7 +59,7 @@
           layout="prev, pager, next, jumper"
           :total="1000"></el-pagination>
       </div>
-    </footer>
+    </el-footer>
 	
 	<div class="drawer" :style="{ transform: isOpen ? 'translateX(0)' : 'translateX(-90%)' }">
 		<div class="drawer_main">
@@ -148,8 +88,10 @@ title="我是标题"
 </template>
 
 <script>
+	import HomeCard from "@/components/Home/HomeCard.vue"
 export default {
   name: 'HomeMain',
+  components:{HomeCard},
   data() {
     return {
       input: '',
@@ -175,7 +117,8 @@ export default {
 	*{
 		box-sizing: border-box;
 	}
-	.header {
+	.el-header {
+		
 		.search {
 			width: 50vw;
 			display: flex;
@@ -191,45 +134,20 @@ export default {
 	.dropdown-item{
 		margin: 10px 20px;
 	}
-	.card-item{
-		width: 300px;
-		.confirm{
-			width: 70px;
-			height: 70px;
-			border-radius: 50%;
-			background-color: aqua;
-			text-align: center;
-			line-height: 70px;
-			font-size: 18px;
-			transform: translate(263px, 50%);
-		}
-		.image{
-			width: 100%;
-			display: block;
-		}
-		.button{
-			padding: 0;
-			float: right;
-		}
-		span{
-			font-size: 22px;
-			display: block;
-		}
-		i{
-			font-size: 16px;
-			display: block;
+	
+	.el-main{
+		.item{
+			margin: 10px 20px;
 		}
 	}
-	.footer {
+	
+	.el-footer {
 		margin: 0 auto;
 		margin-bottom: 5vh;
-		// position: fixed;
-		// bottom: 5vh;
-		// left: 50%;
-		// transform: translateX(-50%);
 		.block {
 		}
 	}
+	
 	.drawer{
 		width: 400px;
 		height: 100%;
@@ -252,76 +170,4 @@ export default {
 			padding: 10px;
 		}
 	}
-
-// 	.clearfix:before,
-// 	.clearfix:after {
-// 		display: table;
-// 		content: "";
-// 	}
-// 	.clearfix:after {
-// 		clear: both
-// 	}
-// .home-main {
-//   width: 100%;
-//   height: 100vh;
-
-//   .main {
-//     padding: 0;
-//     display: flex;
-//     flex-direction: column;
-//     .sort {
-//       margin-bottom: 10px;
-//       border: 1px solid #000;
-//       ul {
-//         display: flex;
-//         li {
-//           padding: 5px 5px;
-//           border-right: 1px solid #000;
-
-//           &:hover {
-//             color: red;
-//             cursor: pointer;
-//           }
-//         }
-//       }
-//     }
-//     .card-list {
-//       width: 100%;
-//       flex: 1;
-//       display: flex;
-//       align-items: center;
-//       justify-content: space-around;
-//       .card {
-//         width: 150px;
-//         background-color: aquamarine;
-//         position: relative;
-//         // display: flex;
-//         // flex-direction: column;
-//         // justify-content: space-between;
-//         .card-top {
-//           img {
-//             width: 100%;
-//             padding-top: 100%;
-//             background-color: red;
-//             display: block;
-//             margin: 0 auto;
-//           }
-//         }
-//         .card-bottom {
-//           background-color: blueviolet;
-//         }
-//         .confirm {
-//           background-color: aqua;
-//           padding: 15px 10px;
-//           border-radius: 50%;
-//           position: absolute;
-//           top: 0;
-//           right: 0;
-//           transform: translate(50%, -50%);
-//         }
-//       }
-//     }
-//   }
-
-// }
 </style>

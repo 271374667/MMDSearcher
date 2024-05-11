@@ -18,7 +18,8 @@ export default {
 
 <style lang="less" scoped>
 	.home-view{
-		width: 90%;
+		// width: 90%;
+		width: 1702px;
 		margin: 0 auto;
 	}
 </style>
