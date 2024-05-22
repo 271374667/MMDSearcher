@@ -1,17 +1,17 @@
 <template>
 	<div class="card">
-		<el-badge value="已读" type="primary">
+		<el-badge value="已读" type="primary" :hidden="status">
 			<el-card>
 				<img
-					src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+					:src="pic_url"
 					class="image" />
 				<div style="padding: 14px">
-					<span>好吃的汉堡</span>
+					<span>id:{{id}}</span>
 					<div>
 						<div class="confirm">
-							<span>作者:</span>
-							<span>级别:</span>
-							<span>评分:</span>
+							<span>作者:{{author}}</span>
+							<span>级别:{{rating}}</span>
+							<span>评分:{{score}}</span>
 						</div>
 					</div>
 				</div>
@@ -20,11 +20,26 @@
 	</div>
 </template>
 
-<script></script>
+<script>
+	export default{
+		name:'HomeCard',
+		props:{
+			id:Number,
+			author:String,
+			rating:String,
+			score:Number,
+			pic_url:String,
+			status:Boolean
+		}
+	}
+</script>
 
 <style lang="less">
 .card {
 	margin: 1.5rem;
+	img{
+		width: 250px;
+	}
 
 	// 这个.el-card__body样式不准删！！！！！！！！
 	.el-card__body {
